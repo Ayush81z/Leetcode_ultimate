@@ -1,53 +1,83 @@
 package BFS;
 
+import com.sun.source.tree.Tree;
+
 public class Iscousin_lc993 {
+    public static class TreeNode {
+        int val;
+        TreeNode left;
+        TreeNode right;
+        TreeNode() {}
+        TreeNode(int val) { this.val = val; }
+        TreeNode(int val, TreeNode left, TreeNode right) {
+            this.val = val;
+            this.left = left;
+            this.right = right;
+        }
+    }
+
+    public static void main(String[] args) {
+        // Tree: [1,2,3,4]
+        TreeNode root = new TreeNode(1);
+        root.left = new TreeNode(2);
+        root.right = new TreeNode(3);
+        root.left.right = new TreeNode(4);
+        root.right.right = new TreeNode(5);
+
+        int x = 5;
+        int y = 4;
+
+        Iscousin_lc993 sol = new Iscousin_lc993();
+        System.out.println(sol.isCousins(root, x, y));
+    }
+
     public boolean isCousins(TreeNode root, int x, int y) {
-        TreeNode xx = findNode(root, x);
-        TreeNode yy = findNode(root, y);
+        TreeNode xval = findnode(root , x); //to check if the nodes are present or not
+        TreeNode yval = findnode(root , y);
 
-        return (
-                (level(root, xx, 0) == level(root, yy, 0)) && (!isSibling(root, xx, yy))
-        );
+        //two checks :
+        //1) the level of nodes
+        //2) and if nodes are siblings , if they are then not a cousin
+        return (level(root , xval ,0) == level(root ,  yval , 0)) && !issiblings(root , xval , yval);
     }
 
-    TreeNode findNode(TreeNode node, int x) {
-        if (node == null) {
-            return null;
+    public TreeNode findnode(TreeNode node, int val) {
+        if (node == null) return null; //return null if not present
+
+        if (node.val == val) {
+            return node;  //return if the target is present in the tree
         }
-        if (node.val == x) {
-            return node;
-        }
-        TreeNode n = findNode(node.left, x);
-        if (n != null) {
-            return n;
-        }
-        return findNode(node.right, x);
+
+        TreeNode n = findnode(node.left , val);
+        if (n != null) return n;  //actual return
+
+        return findnode(node.right , val);
     }
 
-    boolean isSibling (TreeNode node, TreeNode x, TreeNode y) {
-        if (node == null) {
-            return false;
-        }
+    public boolean issiblings(TreeNode node , TreeNode x , TreeNode y) {
+        if (node == null) return false;
 
-        return (
-                (node.left == x && node.right == y) || (node.left == y && node.right == x)
-                        || isSibling(node.left, x, y) || isSibling(node.right, x, y)
-        );
+
+        /* to check all parameters
+       1) check if they are matching the target at sibling position ot not  and also to check for other values like left = x and then for left = y also.
+       2) do recursion to check all nodes.
+         */
+        return (node.left == x && node.right == y) || (node.left == y && node.right == x) ||issiblings(node.left , x ,y ) || issiblings(node.right , x, y);
     }
 
-    int level (TreeNode node, TreeNode x, int lev) {
-        if(node == null) {
-            return 0;
+    public int level (TreeNode node , TreeNode x , int lvl) {
+        if (node == null) return 0;
+
+        if (node == x) {
+            return lvl;  //recursion return
         }
 
-        if(node == x) {
-            return lev;
+        int l = level(node.left , x , lvl+1);
+        if ( l != 0) {
+            return l; //actual return
         }
-
-        int l = level(node.left, x, lev+1);
-        if (l != 0) {
-            return l;
-        }
-        return level(node.right, x, lev+1);
+        return level(node.right ,x , lvl+1);
     }
+
+
 }
