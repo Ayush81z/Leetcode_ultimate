@@ -1,6 +1,8 @@
 package BinaryTree;
 
 import java.util.ArrayDeque;
+import java.util.LinkedList;
+import java.util.Queue;
 
 public class symmetrictree_lc101 {
     public static class TreeNode {
@@ -19,25 +21,23 @@ public class symmetrictree_lc101 {
     public static void main(String[] args) {
 
         // Array: [1,2,2,null,3,null,3]
-
+        //1,2,2,3,4,4,3
         TreeNode root = new TreeNode(1);
 
         root.left = new TreeNode(2);
         root.right = new TreeNode(2);
 
-        root.left.left = null;
-        root.left.right = new TreeNode(3);
+        root.left.left = new TreeNode(3);
+        root.left.right = new TreeNode(4);
 
-        root.right.left = null;
+        root.right.left = new TreeNode(4);
         root.right.right = new TreeNode(3);
 
         boolean result = isSymmetric(root);
         System.out.println(result);   // expected output: false
     }
 
-
-
-
+    //method 1
 //    public static boolean isSymmetric(TreeNode root) {
 //        return ismirror(root , root);
 //    }
@@ -53,31 +53,54 @@ public class symmetrictree_lc101 {
         return ismirror(root.left , root.right);
     }
 
-    private static boolean ismirror(TreeNode t1, TreeNode t2) {
-        ArrayDeque<TreeNode[]> stack = new ArrayDeque<>();
-        stack.push(new TreeNode[] {t1, t2});
+    //method 2
+    private static boolean ismirror (TreeNode l , TreeNode r) {
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.add(l);
+        queue.add(r);
 
-        while (!stack.isEmpty()) {
-            TreeNode[] pair = stack.pop();
-            TreeNode a = pair[0];
-            TreeNode b = pair[1];
+        while (!queue.isEmpty()) {
+            TreeNode a = queue.poll();
+            TreeNode b = queue.poll();
 
-            if (a == null && b == null) {
-                continue;
-            }
+            if (a == null && b == null) continue;
+            if (a == null || b == null) return false;
+            if (a.val != b.val) return false;
 
-            if (a == null || b == null) {
-                return false;
-            }
-
-            if (a.val != b.val) {
-                return false;
-            }
-            stack.push(new TreeNode[]{a.left , b.right});
-            stack.push(new TreeNode[]{a.right , b.left});
+            queue.add(a.left);
+            queue.add(b.right);
+            queue.add(a.right);
+            queue.add(b.left);
         }
         return true;
     }
 
+
+    //method 3
+//    private static boolean ismirror(TreeNode t1, TreeNode t2) {
+//        ArrayDeque<TreeNode[]> stack = new ArrayDeque<>();
+//        stack.push(new TreeNode[] {t1, t2});
+//
+//        while (!stack.isEmpty()) {
+//            TreeNode[] pair = stack.pop();
+//            TreeNode a = pair[0];
+//            TreeNode b = pair[1];
+//
+//            if (a == null && b == null) {
+//                continue;
+//            }
+//
+//            if (a == null || b == null) {
+//                return false;
+//            }
+//
+//            if (a.val != b.val) {
+//                return false;
+//            }
+//            stack.push(new TreeNode[]{a.left , b.right});
+//            stack.push(new TreeNode[]{a.right , b.left});
+//        }
+//        return true;
+//    }
 
 }
