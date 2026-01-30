@@ -1,4 +1,4 @@
-package BFS;
+package DFS;
 
 public class diameterofBS_lc543 {
     public static class TreeNode {
