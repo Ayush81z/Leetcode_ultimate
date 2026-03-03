@@ -16,6 +16,26 @@ public class FlatBTtoLL_lc114 {
     }
 
 
+        public static void main(String[] args) {
+
+            FlatBTtoLL_lc114 sol = new FlatBTtoLL_lc114();
+
+            TreeNode root = new TreeNode(1);
+            root.left = new TreeNode(2);
+            root.right = new TreeNode(3);
+            root.left.right = new TreeNode(4);
+            root.left.right.left = new TreeNode(5);
+
+            sol.flatten(root);
+
+            // Print flattened list (should follow right pointers)
+            TreeNode curr = root;
+            while (curr != null) {
+                System.out.print(curr.val + " ");
+                curr = curr.right;
+            }
+        }
+
     //check book
     public void flatten(TreeNode root) { //void so return null codn
         TreeNode current = root; //cant change the main root
